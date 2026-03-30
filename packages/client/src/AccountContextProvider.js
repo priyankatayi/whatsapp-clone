@@ -18,7 +18,9 @@ const AccountContextProvider = ({ children }) => {
       );
       const val = await res.json();
       setIsLoggedIn(val.loggedIn);
-      navigate("/home");
+      if (val.loggedIn) {
+        navigate("/home");
+      }
     };
     checkUser();
   }, [navigate]);

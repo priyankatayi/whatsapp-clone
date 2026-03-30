@@ -41,7 +41,9 @@ function Login() {
               setError(data.status);
             } else if (data.loggedIn) {
               setIsLoggedIn(data.loggedIn);
-              navigate("/home");
+              if (data.loggedIn) {
+                navigate("/home");
+              }
             }
           });
       }}
