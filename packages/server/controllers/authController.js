@@ -29,21 +29,31 @@ module.exports.loginValidator = async (req, res) => {
         id: existingUser.rows[0].id,
         userid: existingUser.rows[0].userid,
       };
-      req.session.save(() => {
+
+      // 🔥 FORCE SAVE BEFORE RESPONSE
+      return req.session.save((err) => {
+        if (err) {
+          console.log("Session save error:", err);
+          return res.status(500).json({ loggedIn: false });
+        }
+
         return res.json({
           loggedIn: true,
           username: req.body.username,
         });
       });
-    } else {
-      res.json({
-        loggedIn: false,
-        status: "Incorrect username or password",
-      });
     }
-  } else {
-    res.json({ loggedIn: false, status: "Incorrect username or password" });
+
+    return res.json({
+      loggedIn: false,
+      status: "Incorrect username or password",
+    });
   }
+
+  return res.json({
+    loggedIn: false,
+    status: "Incorrect username or password",
+  });
 };
 
 module.exports.registerUser = async (req, res) => {
@@ -64,7 +74,11 @@ module.exports.registerUser = async (req, res) => {
       id: addUserQuery.rows[0].id,
       userid: addUserQuery.rows[0].userid,
     };
-    req.session.save(() => {
+    return req.session.save((err) => {
+      if (err) {
+        return res.status(500).json({ loggedIn: false });
+      }
+
       return res.json({
         loggedIn: true,
         username: req.body.username,
