@@ -31,11 +31,9 @@ app.use(express.json());
 // Every req is going through express session middleware which I set it up and this middleware is parsing any cookies user might have sent
 //  and is using the cookie to retrieve user session  information and attaches it to the req object under req.session
 
-app.use(sessionMidleware);
-
-app.use("/auth", authRouter);
-
 app.set("trust proxy", 1);
+app.use(sessionMidleware);
+app.use("/auth", authRouter);
 
 //socket io requests will not go through expression session middlware,
 // so you will not have access to session cookies
@@ -45,6 +43,12 @@ io.use(wrap(sessionMidleware));
 // only if the user is loggeds in, we are making socket io connection
 io.use(authorizeUser);
 //socket io now has access to session
+
+io.use((socket, next) => {
+  console.log("Session:", socket.request.session);
+  console.log("Cookies:", socket.request.headers.cookie);
+  next();
+});
 io.on("connect", (socket) => {
   console.log(socket.user.userid);
   console.log(socket.user.username);
