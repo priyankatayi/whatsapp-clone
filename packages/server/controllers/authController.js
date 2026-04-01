@@ -29,7 +29,12 @@ module.exports.loginValidator = async (req, res) => {
         id: existingUser.rows[0].id,
         userid: existingUser.rows[0].userid,
       };
-      res.json({ loggedIn: true, username: req.body.username });
+      req.session.save(() => {
+        return res.json({
+          loggedIn: true,
+          username: req.body.username,
+        });
+      });
     } else {
       res.json({
         loggedIn: false,
@@ -59,7 +64,12 @@ module.exports.registerUser = async (req, res) => {
       id: addUserQuery.rows[0].id,
       userid: addUserQuery.rows[0].userid,
     };
-    res.json({ loggedIn: true, username: req.body.username });
+    req.session.save(() => {
+      return res.json({
+        loggedIn: true,
+        username: req.body.username,
+      });
+    });
   } else {
     res.json({ loggedIn: false, status: "user already exists" });
   }
