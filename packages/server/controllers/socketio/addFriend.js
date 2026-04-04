@@ -1,18 +1,23 @@
 const redisClient = require("../../redis");
+const parseFriendsList = require("./parseFriendsList");
+
 const addFriend = async (socket, friendName, cb) => {
-  if (friendName === socket.user.username) {
+  if (friendName === socket.user.username.toLowerCase()) {
     cb({ done: false, errorMsg: "You cannot add yourself" });
     return;
   }
   const friend = await redisClient.hGetAll(`userid:${friendName}`);
-  if (!friend) {
+  if (Object.keys(friend).length === 0) {
     cb({ done: false, errorMsg: "User doesnt exist!" });
     return;
   }
-  const friendsList = await redisClient.lRange(
+  let friendsList = await redisClient.lRange(
     `friends:${socket.user.username}`,
     0,
     -1,
+  );
+  friendsList = await parseFriendsList(friendsList).then((friends) =>
+    friends.map((friend) => friend.username.toLowerCase()),
   );
   if (friendsList.length > 0 && friendsList.includes(friendName)) {
     cb({ done: false, errorMsg: "Friend already exists!" });

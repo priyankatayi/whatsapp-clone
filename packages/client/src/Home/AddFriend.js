@@ -12,7 +12,7 @@ import {
 import TextField from "../Login/TextField";
 import { Form, Formik } from "formik";
 import { FriendsContext } from "./Home";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { friendSchema } from "@whatsapp-clone/common";
 import socket from "../socket";
 import { useCallback } from "react";
@@ -26,14 +26,11 @@ function AddFriend({ isOpen, onClose }) {
     setError("");
   }, [onClose]);
 
-  useEffect(() => {
-    console.log(friendsList);
-  }, [friendsList]);
   return (
     <Modal isOpen={isOpen} onClose={closeModal} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <Heading as="p" size="lg" color="red.500" textAlign="center">
+        <Heading as="p" size="lg" p={3} color="red.500" textAlign="center">
           {error}
         </Heading>
         <ModalHeader>Add a Friend</ModalHeader>
@@ -43,7 +40,7 @@ function AddFriend({ isOpen, onClose }) {
           onSubmit={(values) => {
             socket.emit(
               "add friend",
-              values.friendsName,
+              values.friendsName.toLowerCase(),
               ({ errorMsg, done, newFriend }) => {
                 if (done) {
                   setFriendsList([...friendsList, newFriend]);
