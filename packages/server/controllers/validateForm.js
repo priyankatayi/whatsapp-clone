@@ -5,7 +5,6 @@ const validateForm = async (req, res, next) => {
     const formData = req.body;
     const valid = await formSchema.validate(formData);
     if (valid) {
-      console.log("form is good");
       next();
     } else {
       res.status(422).send();

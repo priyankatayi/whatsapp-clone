@@ -15,7 +15,6 @@ const useSocket = (setFriendsList, setMessages) => {
     });
 
     socket.on("messages", (messages) => {
-      console.log(messages, "messages");
       setMessages(messages);
     });
 

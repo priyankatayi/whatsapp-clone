@@ -3,7 +3,6 @@ const parseFriendsList = require("./parseFriendsList");
 
 const authorizeUser = async (socket, next) => {
   if (!socket.request.session || !socket.request.session.user) {
-    console.log("Bad Request");
     next(new Error("Not authorized"));
   } else {
     socket.user = { ...socket.request.session.user };

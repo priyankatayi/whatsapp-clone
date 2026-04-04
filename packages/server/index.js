@@ -44,11 +44,6 @@ io.use(wrap(sessionMidleware));
 io.use(authorizeUser);
 //socket io now has access to session
 
-io.use((socket, next) => {
-  console.log("Session:", socket.request.session);
-  console.log("Cookies:", socket.request.headers.cookie);
-  next();
-});
 io.on("connect", (socket) => {
   console.log(socket.user.userid);
   console.log(socket.user.username);

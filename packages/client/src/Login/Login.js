@@ -21,7 +21,6 @@ function Login() {
       onSubmit={(values, actions) => {
         const val = { ...values };
         actions.resetForm();
-        console.log("POST");
         fetch(`${process.env.REACT_APP_SERVER_URL}/auth/login`, {
           method: "POST",
           credentials: "include",

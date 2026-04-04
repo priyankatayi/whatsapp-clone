@@ -33,7 +33,6 @@ function Register() {
       })
         .catch((err) => console.log(err))
         .then((res) => {
-          console.log("loggedIn");
           if (!res.ok || !res || res.status >= 400) return;
           return res.json();
         })
@@ -42,7 +41,6 @@ function Register() {
           if (data.status) {
             setError(data.status);
           } else {
-            console.log(data.loggedIn, "loggedIn");
             setIsLoggedIn(data.loggedIn);
             if (data.loggedIn) {
               navigate("/home");

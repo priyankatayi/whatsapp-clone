@@ -15,7 +15,6 @@ function Chatbox({ userid }) {
       })}
       onSubmit={(values, actions) => {
         const message = { to: userid, content: values.message, from: null };
-        console.log(messages);
         socket.emit("message", message);
         setMessages((prev) => [...prev, message]);
         actions.resetForm();
